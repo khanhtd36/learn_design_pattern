@@ -25,7 +25,7 @@ Ví dụ:
   * Cách giải theo strategy pattern:
     - Tạo interface SwimBehavior, QuackBehavior.
     - Tạo SwimNormally, SwimNoWay,... implement SwimBehavior.
-    - Tạo QuackQuack, QuackSilence,... implement QuackBehavior.
+    - Tạo Quack, Squeak, MuteQuack,... implement QuackBehavior.
     - Lớp Duck cha chứa biến swim_behavior kiểu SwimBehavior và biến quack_behavior kiểu QuackBehavior.
     - Lớp con muốn swim kiểu nào thì gọi hàm set_swim_behavior truyền vào implementation đó của SwimBehavior.
     - Lớp con có kiểu swim mới hơn nữa thì tạo 1 implementation mới của SwimBehavior
@@ -72,13 +72,19 @@ class SwimBehavior(abc.ABC):
 
 
 # <editor-fold desc="Các implementation (các strategy) của quack behavior">
-class QuackQuack(QuackBehavior):
+class Quack(QuackBehavior):
 
     def quack(self):
         print('quack like a duck')
 
 
-class QuackSilence(QuackBehavior):
+class Squeak(QuackBehavior):
+
+    def quack(self):
+        print('squeak squeak')
+
+
+class MuteQuack(QuackBehavior):
 
     def quack(self):
         print('cant quack')
@@ -98,4 +104,36 @@ class SwimNoWay(SwimBehavior):
 
     def swim(self):
         print('cant swim')
+
+
 # </editor-fold>
+
+
+class DuckGhe(Duck):
+
+    def __init__(self):
+        super().__init__()
+        self._quack_behavior = Quack()
+        self._swim_behavior = SwimNormally()
+
+
+class DuckDoChoi(Duck):
+
+    def __init__(self):
+        super().__init__()
+        self._quack_behavior = Squeak()
+        self._swim_behavior = SwimNormally()
+
+
+class DuckGo(Duck):
+
+    def __init__(self):
+        super().__init__()
+        self._quack_behavior = MuteQuack()
+        self._swim_behavior = SwimNoWay()
+
+
+if __name__ == '__main__':
+    duck_go = DuckGo()
+    duck_go.swim()
+    duck_go.quack()
